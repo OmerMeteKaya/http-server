@@ -29,6 +29,7 @@ void launch(struct Server *server)
                          "</h1></body></html>";*/
 
     char buffer[30000];
+
     while (1) {
         struct sockaddr_in client_addr;
         socklen_t addrlen = sizeof(client_addr);
@@ -43,9 +44,11 @@ void launch(struct Server *server)
             perror("accept failed");
             continue;
         }
-       //int bytes = read(new_socket, buffer, 29999);
-       // buffer[bytes] = '\0';
+
         read(new_socket, buffer, 30000);
+
+        //int bytes = read(new_socket, buffer, 29999);
+       // buffer[bytes] = '\0';
 
         printf("%s\n", buffer);
 
@@ -61,7 +64,7 @@ int main()
 {
 
     struct Server server = server_constructor(AF_INET,
-        SOCK_STREAM, 0, INADDR_ANY, 8096, 10,launch);
+        SOCK_STREAM, 0, INADDR_ANY, 8099, 10,launch);
 
     server.launch(&server);
 }
