@@ -64,7 +64,7 @@ int main()
 {
 
     struct Server server = server_constructor(AF_INET,
-        SOCK_STREAM, 0, INADDR_ANY, 8099, 10,launch);
+        SOCK_STREAM, 0, INADDR_ANY, 8080, 255,launch);
 
     server.launch(&server);
 }

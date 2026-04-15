@@ -13,4 +13,11 @@ add_executable(http_server
         HTTPRequest.h
         HTTPServer.c
         HTTPServer.h
+        Test/main.c
+        Route.c
+        Route.h
+        ThreadPool.c
+        ThreadPool.h
+        Client.c
+        Client.h
 )

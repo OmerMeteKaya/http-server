@@ -8,7 +8,7 @@
 #include <string.h>
 
 struct Server server_constructor(int domain, int type, int protocol,
-                                 u_long interface,int port,int backlog,void (*launch)(struct Server *server))
+                                 u_long interface,int port,int backlog)
 {
     struct Server server;
 
@@ -49,7 +49,6 @@ struct Server server_constructor(int domain, int type, int protocol,
     }
 
 
-    server.launch = launch;
 
 
 

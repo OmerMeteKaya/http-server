@@ -43,9 +43,9 @@ struct HTTPRequest HTTPRequest_constructor(char *buffer)
     req.body_length = 0;
 
     // -------- REQUEST LINE --------
-    char *line = strtok(buffer, "\r\n");
+    char *request_line = strtok(buffer, "\r\n");
 
-    if (!line) {
+    if (!request_line) {
         printf("Invalid request\n");
         return req;
     }
@@ -54,7 +54,7 @@ struct HTTPRequest HTTPRequest_constructor(char *buffer)
     char uri[1024];
     char version_str[32];
 
-    if (sscanf(line, "%15s %1023s %31s", method, uri, version_str) != 3) {
+    if (sscanf(request_line, "%15s %1023s %31s", method, uri, version_str) != 3) {
         printf("Invalid request line\n");
         return req;
     }
