@@ -11,6 +11,8 @@ add_executable(http_server
         test.c
         HTTPRequest.c
         HTTPRequest.h
+        HTTPResponse.c
+        HTTPResponse.h
         HTTPServer.c
         HTTPServer.h
         Route.c
@@ -19,15 +21,6 @@ add_executable(http_server
         ThreadPool.h
         Client.c
         Client.h
+        Logger.c
+        Logger.h
 )
-
-# To build with Test/main.c instead of test.c, uncomment below and comment out test.c above:
-# add_executable(http_server_test
-#         Server.c
-#         HTTPRequest.c
-#         HTTPServer.c
-#         Route.c
-#         ThreadPool.c
-#         Client.c
-#         Test/main.c
-# )

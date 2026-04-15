@@ -7,16 +7,24 @@
 
 #include "Server.h"
 #include "HTTPRequest.h"
+#include "HTTPResponse.h"
 #include "Route.h"
 #include "ThreadPool.h"
+
+#define DEFAULT_PORT 8080
+#define DEFAULT_THREAD_COUNT 50
 
 struct HTTPServer
 {
     struct Router router;
     struct Server server;
+    int thread_count;
 
-    char* (*register_routes)(struct HTTPServer *server, char* (*route_function)(struct HTTPServer *server, struct HTTPRequest *request),
-                             char *uri, int method_num, ...);
+    int (*register_route)(struct HTTPServer *server,
+                          int (*route_function)(struct HTTPServer *server,
+                                                struct HTTPRequest *request,
+                                                struct HTTPResponse *resp),
+                          const char *uri, int method_num, ...);
     void (*launch)(struct HTTPServer *server);
     void (*http_server_shutdown)(struct HTTPServer *server, struct ThreadPool *pool);
 };

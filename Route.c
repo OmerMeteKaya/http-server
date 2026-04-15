@@ -3,10 +3,13 @@
 //
 
 #include "Route.h"
+#include "Logger.h"
 #include <stdlib.h>
 
 void free_router(struct Router *router)
 {
+    if (!router) return;
+
     for (int i = 0; i < router->count; i++)
     {
         if (router->routes[i].uri)
@@ -15,5 +18,6 @@ void free_router(struct Router *router)
             router->routes[i].uri = NULL;
         }
     }
+    LOG_INFO("Router cleaned up: %d routes freed", router->count);
     router->count = 0;
 }

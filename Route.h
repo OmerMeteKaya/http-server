@@ -5,18 +5,23 @@
 #ifndef HTTP_SERVER_ROUTER_H
 #define HTTP_SERVER_ROUTER_H
 
-#define MAX_ROUTES 100
+#define MAX_ROUTES 256
 
 // Forward declarations
 struct HTTPServer;
 struct HTTPRequest;
+struct HTTPResponse;
 
 struct Route
 {
     int methods[9];
     int method_count;
     char *uri;
-    char *(*route_function)(struct HTTPServer *server, struct HTTPRequest *request);
+    // Route handlers return 0 on success, -1 on error.
+    // The handler populates 'resp' with status, headers, and body.
+    int (*route_function)(struct HTTPServer *server,
+                          struct HTTPRequest *request,
+                          struct HTTPResponse *resp);
 };
 
 struct Router
