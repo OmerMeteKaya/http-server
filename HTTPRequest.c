@@ -99,7 +99,7 @@ struct HTTPRequest HTTPRequest_constructor(char *buffer)
     // -------- BODY --------
     char *body_ptr = strtok(NULL, "");
     if (body_ptr) {
-        req.body = body_ptr;
+        req.body = strdup(body_ptr);
         req.body_length = strlen(body_ptr);
     }
 
@@ -126,5 +126,8 @@ void free_request(struct HTTPRequest *req) {
         free(req->headers[i].key);
         free(req->headers[i].value);
     }
+    
+    if (req->body)
+        free(req->body);
 
 }

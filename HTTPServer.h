@@ -7,26 +7,18 @@
 
 #include "Server.h"
 #include "HTTPRequest.h"
-#define MAX_ROUTES 100
-struct Route
-{
-    int methods[9];
-    int method_count;
-    char *uri;
-    char *(*route_function)(struct HTTPServer *server, struct HTTPRequest *request);
-};
+#include "Route.h"
+#include "ThreadPool.h"
 
-struct Router
-{
-    struct Route routes[MAX_ROUTES];
-    int count;
-};
 struct HTTPServer
 {
+    struct Router router;
     struct Server server;
 
-    void (*register_routes)(struct HTTPServer *server,void (*route_function)(struct HTTPServer *server,struct HTTPRequest *request),
+    char* (*register_routes)(struct HTTPServer *server,char* (*route_function)(struct HTTPServer *server,struct HTTPRequest *request),
         char *uri,int method_num,...);
+    void (*launch)(struct HTTPServer *server);
+    void (*http_server_shutdown)(struct HTTPServer *server, struct ThreadPool *pool);
 };
 
 struct HTTPServer HTTPServer_constructor();

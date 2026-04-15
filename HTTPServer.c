@@ -14,6 +14,7 @@
 struct HTTPServer HTTPServer_constructor();
 
 void launch(struct HTTPServer *server);
+void http_server_shutdown(struct HTTPServer *server, struct ThreadPool *pool);
 void *handler(void *args);
 struct ClientServer
 {
@@ -38,7 +39,8 @@ struct Route* find_route(struct HTTPServer *server, char *uri, int method)
     }
     return NULL;
 }
-void register_routes(struct HTTPServer *server,char* (*route_function)(struct HTTPServer *server,struct HTTPRequest *request),
+
+char* register_routes(struct HTTPServer *server,char* (*route_function)(struct HTTPServer *server,struct HTTPRequest *request),
     char *uri,int method_num,...)
 {
     struct Route *route = &server->router.routes[server->router.count];
@@ -58,8 +60,10 @@ void register_routes(struct HTTPServer *server,char* (*route_function)(struct HT
     server->router.count++;
 
     va_end(methods);
-
+    
+    return NULL;
 }
+
 struct HTTPServer HTTPServer_constructor() {
 
     struct HTTPServer server;
@@ -68,12 +72,13 @@ struct HTTPServer HTTPServer_constructor() {
     server.router.count = 0;
     server.register_routes = register_routes;
     server.launch = launch;
+    server.http_server_shutdown = http_server_shutdown;
     return server;
 }
 
 
 void launch(struct HTTPServer *server) {
-    struct ThreadPool thread_pool = thread_pool_init(10);
+    struct ThreadPool* thread_pool = thread_pool_init(10);
     struct sockaddr *sock_adress = (struct sockaddr *)&server->server.address;
     unsigned long addr_len = sizeof(server->server.address);
     while (1)
@@ -82,15 +87,23 @@ void launch(struct HTTPServer *server) {
         client_server->client = accept(server->server.sockdf,sock_adress,(socklen_t*)&addr_len);
         client_server->server = server;
         struct ThreadJob threadJob = thread_job_create((void*)handler,client_server);
-        thread_pool_add_job(&thread_pool, threadJob);
+        thread_pool_add_job(thread_pool, threadJob);
     }
 }
-    void* handler(void* args)
-    {
+
+void* handler(void* args)
+{
     struct ClientServer* client_server = (struct ClientServer *)args;
 
     char request_string[16000];
-    int bytes = read(client_server->client, request_string, 16000);
+    int bytes = read(client_server->client, request_string, sizeof(request_string) - 1);
+    
+    if (bytes <= 0) {
+        close(client_server->client);
+        free(client_server);
+        return NULL;
+    }
+    
     request_string[bytes] = '\0';
 
     struct HTTPRequest request = HTTPRequest_constructor(request_string);
@@ -109,8 +122,16 @@ void launch(struct HTTPServer *server) {
     write(client_server->client, response, strlen(response));
 
     close(client_server->client);
+    
+    free_request(&request);
     free(client_server);
 
     return NULL;
+}
 
-    }
+void http_server_shutdown(struct HTTPServer *server, struct ThreadPool *pool)
+{
+    thread_pool_destroy(pool);
+    free_router(&server->router);
+    close(server->server.sockdf);
+}

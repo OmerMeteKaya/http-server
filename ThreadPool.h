@@ -32,7 +32,7 @@ typedef struct ThreadPool {
 } ThreadPool;
 
 
-ThreadPool thread_pool_init(int num_threads);
+ThreadPool* thread_pool_init(int num_threads);
 
 
 void thread_pool_add(ThreadPool *pool, void (*function)(void *), void *arg);

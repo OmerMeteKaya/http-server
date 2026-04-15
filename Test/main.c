@@ -2,29 +2,27 @@
 // Created by mete on 14.04.2026.
 //
 
-#include "HTTPRequest.h"
+#include "../../http-server/HTTPServer.h"
+#include <stdio.h>
 
-struct HTTPRequest
-{
-    int x;
-};
-struct HTTPServer
-{
-    int y;
-    void (*register_routes)(struct HTTPServer *server,char *(*route_function)(struct HTTPServer *server,struct HTTPRequest *request),
-        char *uri,int method_num,...);
-};
 char *render_template();
 
-char *example(struct HTTPServer *server,struct HTTPRequest *request)
+char *example(struct HTTPServer *server, struct HTTPRequest *request)
 {
+    (void)server;
+    (void)request;
     return render_template();
-};
+}
+
+char *render_template()
+{
+    return "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<html><body><h1>Hello!</h1></body></html>";
+}
 
 int main()
 {
-    struct HTTPServer server;
-    server.register_routes(&server,example,"/example",2,0,1);
-    server.launch();
+    struct HTTPServer server = HTTPServer_constructor();
+    server.register_routes(&server, example, "/example", 2, 0, 1);
+    server.launch(&server);
     return 0;
 }

@@ -42,24 +42,24 @@ void *worker(void *arg)
 }
 
 
-ThreadPool thread_pool_init(int num_threads)
+ThreadPool* thread_pool_init(int num_threads)
 {
-    ThreadPool pool;
+    ThreadPool* pool = (ThreadPool*)malloc(sizeof(ThreadPool));
 
-    pool.thread_count = num_threads;
-    pool.queue_size = 0;
-    pool.queue_front = 0;
-    pool.queue_rear = 0;
-    pool.stop = 0;
+    pool->thread_count = num_threads;
+    pool->queue_size = 0;
+    pool->queue_front = 0;
+    pool->queue_rear = 0;
+    pool->stop = 0;
 
-    pool.threads = malloc(sizeof(pthread_t) * num_threads);
+    pool->threads = malloc(sizeof(pthread_t) * num_threads);
 
-    pthread_mutex_init(&pool.lock, NULL);
-    pthread_cond_init(&pool.notify, NULL);
+    pthread_mutex_init(&pool->lock, NULL);
+    pthread_cond_init(&pool->notify, NULL);
 
     for (int i = 0; i < num_threads; i++)
     {
-        pthread_create(&pool.threads[i], NULL, worker, &pool);
+        pthread_create(&pool->threads[i], NULL, worker, pool);
     }
 
     return pool;
@@ -114,4 +114,6 @@ void thread_pool_destroy(ThreadPool *pool)
 
     pthread_mutex_destroy(&pool->lock);
     pthread_cond_destroy(&pool->notify);
+    
+    free(pool);
 }
