@@ -11,7 +11,7 @@
 
 
 typedef struct ThreadJob {
-    void (*function)(void *);
+    void* (*function)(void *);
     void *arg;
 } ThreadJob;
 
@@ -35,10 +35,10 @@ typedef struct ThreadPool {
 ThreadPool* thread_pool_init(int num_threads);
 
 
-void thread_pool_add(ThreadPool *pool, void (*function)(void *), void *arg);
+void thread_pool_add(ThreadPool *pool, void* (*function)(void *), void *arg);
 void thread_pool_add_job(ThreadPool *pool, ThreadJob job);
 
-ThreadJob thread_job_create(void (*function)(void *), void *arg);
+ThreadJob thread_job_create(void* (*function)(void *), void *arg);
 void thread_pool_destroy(ThreadPool *pool);
 
 #endif

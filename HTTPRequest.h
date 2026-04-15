@@ -8,6 +8,10 @@
 #include <stddef.h>
 
 #define MAX_HEADERS 100
+#define MAX_REQUEST_SIZE 16384
+#define MAX_URI_LENGTH 2048
+#define MAX_METHOD_LENGTH 16
+#define MAX_VERSION_LENGTH 32
 
 typedef enum
 {
@@ -44,6 +48,7 @@ struct HTTPRequest {
 };
 
 struct HTTPRequest HTTPRequest_constructor(char *buffer);
+const char* get_header(const struct HTTPRequest *req, const char *key);
 void free_request(struct HTTPRequest *req);
 
 #endif //HTTP_SERVER_HTTPREQUEST_H

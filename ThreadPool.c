@@ -72,7 +72,7 @@ void thread_pool_add_job(ThreadPool *pool, ThreadJob job)
 
     if (pool->queue_size == MAX_QUEUE)
     {
-        printf("Queue full!\n");
+        fprintf(stderr, "[ThreadPool] Queue full!\n");
         pthread_mutex_unlock(&pool->lock);
         return;
     }
@@ -88,7 +88,7 @@ void thread_pool_add_job(ThreadPool *pool, ThreadJob job)
 
 
 
-ThreadJob thread_job_create(void (*function)(void *), void *arg)
+ThreadJob thread_job_create(void* (*function)(void *), void *arg)
 {
     ThreadJob job;
     job.function = function;
@@ -114,6 +114,6 @@ void thread_pool_destroy(ThreadPool *pool)
 
     pthread_mutex_destroy(&pool->lock);
     pthread_cond_destroy(&pool->notify);
-    
+
     free(pool);
 }

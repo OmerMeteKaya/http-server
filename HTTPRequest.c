@@ -12,7 +12,7 @@
 
 // -------------------- METHOD PARSER --------------------
 
-HTTPMethod method_select(const char *method)
+static HTTPMethod method_select(const char *method)
 {
     if (strcasecmp(method, "GET") == 0) return GET;
     if (strcasecmp(method, "POST") == 0) return POST;
@@ -46,16 +46,16 @@ struct HTTPRequest HTTPRequest_constructor(char *buffer)
     char *request_line = strtok(buffer, "\r\n");
 
     if (!request_line) {
-        printf("Invalid request\n");
+        fprintf(stderr, "[HTTP] Invalid request: empty request line\n");
         return req;
     }
 
-    char method[16];
-    char uri[1024];
-    char version_str[32];
+    char method[MAX_METHOD_LENGTH];
+    char uri[MAX_URI_LENGTH];
+    char version_str[MAX_VERSION_LENGTH];
 
-    if (sscanf(request_line, "%15s %1023s %31s", method, uri, version_str) != 3) {
-        printf("Invalid request line\n");
+    if (sscanf(request_line, "%15s %2047s %31s", method, uri, version_str) != 3) {
+        fprintf(stderr, "[HTTP] Invalid request line format\n");
         return req;
     }
 
@@ -97,17 +97,31 @@ struct HTTPRequest HTTPRequest_constructor(char *buffer)
     }
 
     // -------- BODY --------
+    // Check Content-Length header for accurate body parsing
+    const char *content_length_str = get_header(&req, "Content-Length");
     char *body_ptr = strtok(NULL, "");
-    if (body_ptr) {
-        req.body = strdup(body_ptr);
-        req.body_length = strlen(body_ptr);
+    
+    if (body_ptr && strlen(body_ptr) > 0) {
+        if (content_length_str) {
+            size_t content_length = (size_t)atol(content_length_str);
+            size_t available = strlen(body_ptr);
+            size_t body_len = (content_length < available) ? content_length : available;
+            
+            req.body = (char *)malloc(body_len + 1);
+            memcpy(req.body, body_ptr, body_len);
+            req.body[body_len] = '\0';
+            req.body_length = body_len;
+        } else {
+            req.body = strdup(body_ptr);
+            req.body_length = strlen(body_ptr);
+        }
     }
 
     return req;
 }
 
 // -------------------- HEADER GETTER --------------------
-char* get_header(struct HTTPRequest *req, const char *key)
+const char* get_header(const struct HTTPRequest *req, const char *key)
 {
     for (int i = 0; i < req->header_count; i++) {
         if (strcasecmp(req->headers[i].key, key) == 0)
@@ -126,7 +140,7 @@ void free_request(struct HTTPRequest *req) {
         free(req->headers[i].key);
         free(req->headers[i].value);
     }
-    
+
     if (req->body)
         free(req->body);
 
