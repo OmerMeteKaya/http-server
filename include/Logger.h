@@ -33,6 +33,10 @@ void logger_destroy(struct Logger *logger);
 void log_msg(struct Logger *logger, LogLevel level, const char *file, int line,
              const char *fmt, ...);
 
+// Async-signal-safe write for use in signal handlers.
+// Only writes directly to stderr. No formatting, no locks.
+void log_signal_safe(const char *msg);
+
 // Convenience macros
 #define LOG_DEBUG(...) log_msg(&g_logger, LOG_DEBUG, __FILE__, __LINE__, __VA_ARGS__)
 #define LOG_INFO(...)  log_msg(&g_logger, LOG_INFO,  __FILE__, __LINE__, __VA_ARGS__)

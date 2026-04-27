@@ -6,21 +6,21 @@ set(CMAKE_C_STANDARD 11)
 include_directories(.)
 
 add_executable(http_server
-        Server.c
-        Server.h
+        src/Server.c
+        include/Server.h
         test.c
-        HTTPRequest.c
-        HTTPRequest.h
-        HTTPResponse.c
-        HTTPResponse.h
-        HTTPServer.c
-        HTTPServer.h
-        Route.c
-        Route.h
-        ThreadPool.c
-        ThreadPool.h
-        Client.c
-        Client.h
-        Logger.c
-        Logger.h
+        src/HTTPRequest.c
+        include/HTTPRequest.h
+        src/HTTPResponse.c
+        include/HTTPResponse.h
+        src/HTTPServer.c
+        include/HTTPServer.h
+        src/Route.c
+        include/Route.h
+        src/ThreadPool.c
+        include/ThreadPool.h
+        src/Client.c
+        include/Client.h
+        src/Logger.c
+        include/Logger.h
 )

@@ -2,8 +2,8 @@
 // Created by mete on 13.04.2026.
 //
 
-#include "HTTPRequest.h"
-#include "Logger.h"
+#include "../include/HTTPRequest.h"
+#include "../include/Logger.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -2,8 +2,8 @@
 // Created by mete on 14.04.2026.
 //
 
-#include "ThreadPool.h"
-#include "Logger.h"
+#include "../include/ThreadPool.h"
+#include "../include/Logger.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

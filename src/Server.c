@@ -2,8 +2,8 @@
 // Created by mete on 11.04.2026.
 //
 
-#include "Server.h"
-#include "Logger.h"
+#include "../include/Server.h"
+#include "../include/Logger.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

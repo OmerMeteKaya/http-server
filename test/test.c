@@ -2,8 +2,8 @@
 // Created by mete on 12.04.2026.
 //
 
-#include "HTTPServer.h"
-#include "Logger.h"
+#include "../include/HTTPServer.h"
+#include "../include/Logger.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

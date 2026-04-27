@@ -2,7 +2,7 @@
 // Created by mete on 15.04.2026.
 //
 
-#include "Logger.h"
+#include "../include/Logger.h"
 #include <time.h>
 #include <string.h>
 #include <pthread.h>

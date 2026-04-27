@@ -2,9 +2,9 @@
 // Created by mete on 13.04.2026.
 //
 
-#include "HTTPServer.h"
-#include "Server.h"
-#include "Logger.h"
+#include "../include/HTTPServer.h"
+#include "../include/Server.h"
+#include "../include/Logger.h"
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,7 +16,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include "ThreadPool.h"
+#include "../include/ThreadPool.h"
 
 #define BACKLOG_SIZE 512
 #define READ_BUFFER_SIZE 4096

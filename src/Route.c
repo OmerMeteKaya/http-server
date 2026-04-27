@@ -2,8 +2,8 @@
 // Created by mete on 14.04.2026.
 //
 
-#include "Route.h"
-#include "Logger.h"
+#include "../include/Route.h"
+#include "../include/Logger.h"
 #include <stdlib.h>
 
 void free_router(struct Router *router)
