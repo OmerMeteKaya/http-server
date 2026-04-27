@@ -8,7 +8,7 @@ include_directories(.)
 add_executable(http_server
         src/Server.c
         include/Server.h
-        test.c
+        test/test.c
         src/HTTPRequest.c
         include/HTTPRequest.h
         src/HTTPResponse.c
